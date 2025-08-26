@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- Biblioteca do Socket.IO -->
+
+    <style>
+      div {
+        text-align: center;
+        margin-top: 20%;
+      }
+      h2 {
+        font-family: Arial, Helvetica, sans-serif;
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h2 id="displaySeconds">Segundos: 0</h2>
+      <button>Iniciar</button>
+    </div>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+    <script>
+      let socket = io("ws://localhost:3000");
+
+      const button = document.querySelector("button");
+
+      const startTime = () => {
+        socket.emit("startTimer");
+      };
+
+      
+      socket.on("setSeconds", (data) => {
+        document.getElementById(
+          "displaySeconds"
+        ).innerHTML = `Segundos: ${data}`;
+      });
+
+      button.addEventListener("click", startTime);
+    </script>
+  </body>
+</html>
