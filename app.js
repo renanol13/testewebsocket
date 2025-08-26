@@ -10,7 +10,9 @@ app.get("/", (req, res) => {
   return res.sendFile(__dirname + "/index.html");
 });
 
-serverHttp.listen(3000, () => {
+const PORT = 3000 || process.env.PORT;
+
+serverHttp.listen(PORT, () => {
   console.log("Server is running on port 3000");
 });
 
