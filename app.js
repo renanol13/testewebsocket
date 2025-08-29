@@ -18,7 +18,7 @@ serverHttp.listen(PORT, () => {
 
 let users = [];
 Io.on("connection", (socket) => {
-  socket.emit("updateUsers", users);
+  Io.emit("updateUsers", users);
   socket.on("joinRoom", (name) => {
     let isUser = users.find((user) => user.name === name);
     if (!isUser) {
@@ -26,10 +26,10 @@ Io.on("connection", (socket) => {
         name: name,
         id: socket.id,
       });
-      socket.emit("updateUsers", users);
     } else {
       isUser.id = socket.id;
     }
+    Io.emit("updateUsers", users);
   });
 
   console.log(`Usuário conectado no servidor: ${socket.id}`);
@@ -47,6 +47,7 @@ Io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`Usuário desconectado do servidor: ${socket.id}`);
     users = users.filter((user) => user.id != socket.id);
+    Io.emit("updateUsers", users);
     clearInterval(interval);
   });
 });
