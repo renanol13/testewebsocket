@@ -8,14 +8,29 @@
     <!-- Biblioteca do Socket.IO -->
 
     <style>
+      *{
+        margin: 0;
+        padding: 0;
+      }
+
       div {
         text-align: center;
-        margin-top: 20%;
+        height: 8em;
       }
       h2 {
         font-family: Arial, Helvetica, sans-serif;
         color: blue;
       }
+
+      #showUsers p{
+        font-size: 1.3em;
+        font-weight: bold;
+        margin-bottom: 8px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: green;
+      }
+
+      
     </style>
   </head>
   <body>
@@ -23,25 +38,60 @@
       <h2 id="displaySeconds">Segundos: 0</h2>
       <button>Iniciar</button>
     </div>
+
+    <div id="boxInput">
+      <label for="name">Digite seu Nome:</label>
+      <input type="text" id="name">
+      <button id="enter">Entrar</button>
+    </div>
+
+    <div id="showUsers">
+      <h2>Usuarios ativos: </h2>
+    </div>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
     <script>
       let socket = io("ws://localhost:3000");
 
       const button = document.querySelector("button");
+      const name = document.getElementById('name')
+      const enter = document.getElementById('enter')
+      const showUsers = document.getElementById('showUsers')
+
+      const createListUser = (data) => {
+        console.log(data);
+        
+        data.forEach((user) => {
+          const userElement = document.createElement('p')
+          userElement.innerText = '° '+user.name
+
+          showUsers.appendChild(userElement)
+        })
+      }
 
       const startTime = () => {
         socket.emit("startTimer");
       };
 
-      
+      const connectUser = () => {
+        socket.emit('joinRoom', name.value)
+      }
+
+      socket.on('updateUsers', (data)=> {
+        alert(`${data.newUser} está online!`)
+        createListUser(data.allUsers)
+      })
+
       socket.on("setSeconds", (data) => {
         document.getElementById(
           "displaySeconds"
         ).innerHTML = `Segundos: ${data}`;
       });
 
+      // socket.emit('JoinRoom')
+
       button.addEventListener("click", startTime);
+      enter.addEventListener('click', connectUser)
     </script>
   </body>
 </html>
