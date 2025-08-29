@@ -60,6 +60,7 @@
       const showUsers = document.getElementById('showUsers')
 
       const createListUser = (data) => {
+        showUsers.innerHTML = ''
         
         data.forEach((user) => {
           const userElement = document.createElement('p')
