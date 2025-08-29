@@ -52,6 +52,7 @@
 
     <script>
       let socket = io("https://testewebsocket.onrender.com/");
+      // let socket = io("ws://localhost:3000")
 
       const button = document.querySelector("button");
       const name = document.getElementById('name')
@@ -59,7 +60,6 @@
       const showUsers = document.getElementById('showUsers')
 
       const createListUser = (data) => {
-        console.log(data);
         
         data.forEach((user) => {
           const userElement = document.createElement('p')
@@ -78,8 +78,8 @@
       }
 
       socket.on('updateUsers', (data)=> {
-        alert(`${data.newUser} está online!`)
-        createListUser(data.allUsers)
+        // alert(`${data.newUser} está online!`)
+        createListUser(data)
       })
 
       socket.on("setSeconds", (data) => {

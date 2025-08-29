@@ -18,6 +18,7 @@ serverHttp.listen(PORT, () => {
 
 let users = [];
 Io.on("connection", (socket) => {
+  socket.emit("updateUsers", users);
   socket.on("joinRoom", (name) => {
     let isUser = users.find((user) => user.name === name);
     if (!isUser) {
@@ -25,7 +26,7 @@ Io.on("connection", (socket) => {
         name: name,
         id: socket.id,
       });
-      Io.emit("updateUsers", {newUser: name, allUsers: users});
+      socket.emit("updateUsers", users);
     } else {
       isUser.id = socket.id;
     }
